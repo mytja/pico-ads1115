@@ -30,7 +30,7 @@ void ads1115_read_adc(uint16_t *adc_value, ads1115_adc_t *adc){
     uint8_t dst[2];
     i2c_write_blocking(adc->i2c_port, adc->i2c_addr,
                        &ADS1115_POINTER_CONVERSION, 1, true);
-    i2c_read_blocking(adc->i2c_port, adc->i2c_addr, &dst, 2,
+    i2c_read_blocking(adc->i2c_port, adc->i2c_addr, dst, 2,
                       false);
     *adc_value = (dst[0] << 8) | dst[1];
 }
@@ -78,7 +78,7 @@ void ads1115_read_config(ads1115_adc_t *adc){
     uint8_t dst[2];
     i2c_write_blocking(adc->i2c_port, adc->i2c_addr,
                        &ADS1115_POINTER_CONFIGURATION, 1, true);
-    i2c_read_blocking(adc->i2c_port, adc->i2c_addr, &dst, 2,
+    i2c_read_blocking(adc->i2c_port, adc->i2c_addr, dst, 2,
                       false);
     adc->config = (dst[0] << 8) | dst[1];
 }
@@ -88,7 +88,7 @@ void ads1115_write_config(ads1115_adc_t *adc) {
     src[0] = ADS1115_POINTER_CONFIGURATION;
     src[1] = (uint8_t)(adc->config >> 8);
     src[2] = (uint8_t)(adc->config & 0xff);
-    i2c_write_blocking(adc->i2c_port, adc->i2c_addr, &src, 3,
+    i2c_write_blocking(adc->i2c_port, adc->i2c_addr, src, 3,
                        false);
 }
 
