@@ -76,10 +76,10 @@ void ads1115_read_config(ads1115_adc_t *adc) {
     // Default configuration after power up should be 34179.
     // Default config with bit 15 cleared is 1411
     uint8_t dst[2];
-    i2c_write_blocking(adc->i2c_port, adc->i2c_addr,
-                       &ADS1115_POINTER_CONFIGURATION, 1, true);
-    i2c_read_blocking(adc->i2c_port, adc->i2c_addr, dst, 2,
-                      false);
+    i2c_write_timeout_us(adc->i2c_port, adc->i2c_addr,
+                         &ADS1115_POINTER_CONFIGURATION, 1, true, 5000);
+    i2c_read_timeout_us(adc->i2c_port, adc->i2c_addr, dst, 2,
+                        false, 5000);
     adc->config = (dst[0] << 8) | dst[1];
 }
 
@@ -88,8 +88,8 @@ void ads1115_write_config(ads1115_adc_t *adc) {
     src[0] = ADS1115_POINTER_CONFIGURATION;
     src[1] = (uint8_t)(adc->config >> 8);
     src[2] = (uint8_t)(adc->config & 0xff);
-    i2c_write_blocking(adc->i2c_port, adc->i2c_addr, src, 3,
-                       false);
+    i2c_write_timeout_us(adc->i2c_port, adc->i2c_addr, src, 3,
+                         false, 5000);
 }
 
 void ads1115_set_input_mux(enum ads1115_mux_t mux, ads1115_adc_t *adc) {
